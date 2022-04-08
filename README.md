@@ -1,6 +1,6 @@
 # Project 2: Graph Analysis
 * Assigned: 4/8 Fri
-* Due: 5/2 Mon 10AM
+* Due: 5/9 Mon 10AM
 * Value: 5% of your grade
 * Max team of 2 **via [Gradescope](https://www.gradescope.com)**. 
 
