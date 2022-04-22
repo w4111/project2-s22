@@ -1,6 +1,7 @@
 # Project 2: Graph Analysis
 * Assigned: 4/8 Fri
 * Due: 5/9 Mon 10AM
+* Note that project 2 has **no late day** because grades are due to registrar 5/13. We released project 2 a month before due to ensure sufficient time.
 * Value: 5% of your grade
 * Max team of 2 **via [Gradescope](https://www.gradescope.com)**. 
 
