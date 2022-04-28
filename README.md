@@ -7,6 +7,7 @@
 
 ### Changelog
 * 4/24: Update the example for text containing "MAGA" and "Trump".
+* 4/28: Update the definition of alphanumeric characters, which includes captial letters A-Z, lowercase letters a-z, digits 0-9 and underline _.
 
 ## Instructions
 [Click here to open the project2 notebook in google colab](https://colab.research.google.com/github/w4111/project2-s22/blob/main/project2.ipynb)
