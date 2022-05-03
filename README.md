@@ -9,6 +9,7 @@
 * 4/24: Update the example for text containing **both** "MAGA" and "Trump".
 * 4/28: Update the definition of alphanumeric characters, which includes capital letters A-Z, lowercase letters a-z, digits 0-9 and underline _.
 * 4/29: Update the corner cases of users without tweets for Q5 and nodes without inbound/outbound nodes for Q7.
+* 5/3: Add instructions to check if you pass the first two test cases.
 
 ## Instructions
 [Click here to open the project2 notebook in google colab](https://colab.research.google.com/github/w4111/project2-s22/blob/main/project2.ipynb)
