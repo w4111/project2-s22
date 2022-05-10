@@ -29,6 +29,11 @@ CREATE OR REPLACE TABLE tweets(idx INTEGER, create_time VARCHAR, id DOUBLE, in_r
 COPY tweets FROM \'tweets.csv\' (FORMAT \'csv\', quote \'\"\', header 0, delimiter \',\');
 """)
 
+
+q2result = None
+q5result = None
+q6result = None
+
 class TestValue():
     def assertEqual(self, v1, v2, msg):
         if v1 != v2:
@@ -52,6 +57,8 @@ class TestValue():
         
     def test_q2(self):
         result = rungq(self.q2)
+        global q2result
+        q2result = result
         self.assertEqual(len(result.columns), 3, "result columns are wrong")
         self.assertEqual(len(result), 5, "result rows are wrong")
         self.assertEqual(2018 in list(pd.to_numeric(result["year"],errors='coerce')), True, "result year is wrong")
@@ -70,7 +77,7 @@ class TestValue():
         self.assertEqual("lomadia" in list(result["dst"]), True, "result dst is wrong")
         self.assertEqual("cyberiantiger66" in list(result["dst"]), True, "result dst is wrong")
         self.assertEqual("cellbit" in list(result["dst"]), True, "result dst is wrong")
-        
+    
     def test_q4(self):
         # provide another graph
         create_graph = """DROP TABLE IF EXISTS Graph;
@@ -86,6 +93,8 @@ select distinct src, dst[1:] as dst from tmp where prefix(dst, '@');"""
         
     def test_q5(self):
         result = rungq(self.q5)
+        global q5result
+        q5result = result
         self.assertEqual(len(result.columns), 1, "result columns are wrong")
         self.assertEqual(len(result), 1, "result rows are wrong")
         self.assertEqual(abs(result["unpopular_popular"].iloc[0] - 0.001781) < 0.00001, True, "result unpopular_popular is wrong")
@@ -93,10 +102,13 @@ select distinct src, dst[1:] as dst from tmp where prefix(dst, '@');"""
     
     def test_q6(self):
         result = rungq(self.q6)
+        global q6result
+        q6result = result
         self.assertEqual(len(result.columns), 1, "result columns are wrong")
         self.assertEqual(len(result), 1, "result rows are wrong")
         # both 300 or 100 (divide by 3) are acceptable
         self.assertEqual(abs(result["no_of_triangles"].iloc[0] - 300) < 0.000001 or abs(result["no_of_triangles"].iloc[0] - 100) < 0.000001, True, "result no_of_triangles is wrong")
+        
 
     def test_q7(self):
         result = self.page_rank(20, db)
@@ -119,6 +131,33 @@ select distinct src, dst[1:] as dst from tmp where prefix(dst, '@');"""
         self.assertEqual(abs(result["page_rank_score"][result["username"] == "AlexanderCavali"].iloc[0] - 4.5471e-05) < 1e-07, True, "page_rank_score is wrong")
         self.assertEqual(abs(result["page_rank_score"][result["username"] == "Bellla391"].iloc[0] -4.440535194616224e-08) < 1e-12, True, "page_rank_score is wrong")
         
+    def test_q2partial(self):
+        result = q2result
+        self.assertEqual(len(result.columns), 3, "result columns are wrong")
+        self.assertEqual(len(result), 5, "result rows are wrong")
+        self.assertEqual(2018 in list(pd.to_numeric(result["year"],errors='coerce')), True, "result year is wrong")
+        
+    def test_q3partial(self):
+        test_graph = "SELECT * FROM Graph;"
+        result = rungq(test_graph)
+        self.assertEqual(len(result.columns), 2, "result columns are wrong")
+        self.assertEqual("crkie" in list(result["src"]), True, "result src is wrong")
+        self.assertEqual("awscloud" in list(result["src"]), True, "result src is wrong")
+        self.assertEqual("CMDRZman" in list(result["src"]), True, "result src is wrong")
+        
+    def test_q5partial(self):
+        result = q5result
+        self.assertEqual(len(result.columns), 1, "result columns are wrong")
+        self.assertEqual(len(result), 1, "result rows are wrong")
+        self.assertEqual(abs(result["unpopular_popular"].iloc[0] - 0.001781) < 0.001, True, "result unpopular_popular is wrong")      
+        
+    def test_q6partial(self):
+        result = q6result
+        self.assertEqual(len(result.columns), 1, "result columns are wrong")
+        self.assertEqual(len(result), 1, "result rows are wrong")
+        # both 300 or 100 (divide by 3) are acceptable
+        self.assertEqual(abs(result["no_of_triangles"].iloc[0] - 300) < 500, True, "result no_of_triangles is wrong")
+        
 t = TestValue()
 t.setUp()
 print("------q1------")
@@ -137,4 +176,16 @@ print("------q7------")
 t.test_q7()
 print("------q8------")
 t.test_q8()
+print("------q2partial------")
+# For q2, you will receive 3 points if you get the number of rows correct and have "2018" (the most common year) in the result.
+t.test_q2partial()
+print("------q3partial------")
+# For q3, you will receive 3 points if you have "crkie", "awscloud" and "CMDRZman" in the source of the graph.
+t.test_q3partial()
+print("------q5partial------")
+# For q5, you will receive 3 points if your answer is in the range of (0.000781, 0.002781)
+t.test_q5partial()
+print("------q6partial------")
+# For q6, you will receive 3 points if your name of the triangle is in the range of (0, 800)
+t.test_q6partial()
 print("------end------")
